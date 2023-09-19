@@ -5,6 +5,7 @@ import FileBase64 from "react-file-base64"
 import useStyles from "./styles"
 import { useDispatch, useSelector} from "react-redux"
 import { createPost,updatePost } from "../../actions/posts";
+import { useNavigate } from "react-router-dom";
 
 const Form = ({currentId,setCurrentId})=>{
     const [postData, setPostData] = useState({
@@ -14,8 +15,17 @@ const Form = ({currentId,setCurrentId})=>{
         selectedFile: ""
     })
     const {classes} = useStyles();
+    const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('profile'));
-    const post = useSelector((state) => currentId? state.posts.find((p)=>p._id===currentId): null);
+    let creator;
+    if(user?.result?.picture){
+        creator=user.token.sub;
+    }
+    else if(user){
+        creator = user.result._id;
+    }
+    const {posts} = useSelector((state)=>state.posts);
+    const post = currentId? posts.find((p)=>p._id===currentId): null;
     useEffect(()=>{
         if(post) setPostData(post);
     },[post])
@@ -28,7 +38,7 @@ const Form = ({currentId,setCurrentId})=>{
             dispatch(updatePost(currentId,{ ...postData, name: user?.result?.name }));
         }
         else{
-            dispatch(createPost({ ...postData, name: user?.result?.name }));
+            dispatch(createPost({ ...postData, name: user?.result?.name, creator: creator },navigate));
         }
         clear();
     }
@@ -45,7 +55,7 @@ const Form = ({currentId,setCurrentId})=>{
 
     if (!user?.result?.name) {
         return (
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} elevation={6}>
             <Typography variant="h6" align="center">
               Please Sign In to create your own memories and like other's memories.
             </Typography>
@@ -54,7 +64,7 @@ const Form = ({currentId,setCurrentId})=>{
     }
 
     return (
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={6}>
                 <form className={`${classes.form} ${classes.root}`} autoComplete="off" noValidate onSubmit={handleSubmit}>
                     <Typography variant="h6">{currentId? "Editing": "Creating"} a memory</Typography>
                     <TextField name="Title" variant="outlined" label="title" fullWidth value={postData.title} onChange={(e) => setPostData({...postData,title: e.target.value})} />

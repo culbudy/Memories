@@ -1,6 +1,6 @@
-import { makeStyles } from "tss-react/mui";
+import { makeStyles } from 'tss-react/mui';
 
-export default makeStyles()({
+export default makeStyles()((theme)=>({
   media: {
     height: 0,
     paddingTop: '56.25%',
@@ -49,4 +49,8 @@ export default makeStyles()({
     display: 'flex',
     justifyContent: 'space-between',
   },
-});
+  cardAction: {
+    display: 'block',
+    textAlign: 'initial',
+  },
+}));

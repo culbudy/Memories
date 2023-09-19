@@ -2,6 +2,11 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) =>{
   return {
+      [theme.breakpoints.down('sm')]: {
+        mainContainer: {
+          flexDirection: 'column-reverse',
+        },
+      },
       appBar: {
         borderRadius: 15,
         margin: '30px 0',

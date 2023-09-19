@@ -2,9 +2,9 @@ import React,{useEffect,useState} from "react"
 import {AppBar, Avatar, Toolbar, Typography, Button} from "@mui/material"
 import {Link, useNavigate, useLocation} from "react-router-dom"
 import { useDispatch } from 'react-redux';
-import decode from "jwt-decode";
 
-import memories from '../../images/memories.png'
+import memoriesLogo from '../../images/memories-Logo.png';
+import memoriesText from '../../images/memories-Text.png';
 import  useStyles from "./styles"
 import { ACTION_TYPES } from "../../constants/actionType";
 
@@ -18,7 +18,7 @@ const Navbar = () =>{
     const logout = () => {
         dispatch({ type: ACTION_TYPES.LOGOUT });
         setUser(null);
-        window.location.reload();
+        window.location.reload()
         // navigate("/");
       }
 
@@ -29,7 +29,11 @@ const Navbar = () =>{
         if (token) {
             // console.log(token);
           const expiryTime = 1695050343;
-          if (expiryTime * 1000 < new Date().getTime()) logout();
+          if (expiryTime * 1000 > new Date().getTime()){
+            // console.log("logged Out");
+            console.log(expiryTime + ", " + new Date().getTime());
+            logout();
+          }
         }
     
         setUser(JSON.parse(localStorage.getItem('profile')));
@@ -37,10 +41,10 @@ const Navbar = () =>{
 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
-            <div className={classes.brandContainer}>
-                <Typography component={Link} to="/" className={classes.heading} variant="h3" align="center">Memories</Typography>
-                <img className={classes.image} src={memories} alt="memories" height="40" />
-            </div>
+             <Link to="/" className={classes.brandContainer}>
+                <img component={Link} to="/" src={memoriesText} alt="icon" height="45px" />
+                <img className={classes.image} src={memoriesLogo} alt="icon" height="40px" />
+            </Link>
             <Toolbar className={classes.toolbar}>
                 {user ? (   
                     <div className={classes.profile}>
