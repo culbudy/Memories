@@ -17,6 +17,7 @@ export const getPosts = () => async (dispatch) =>{
 export const createPost = (post) => async (dispatch) =>{
     try {
         const {data} = await api.createPost(post);
+        // console.log(data.creator);
         dispatch({
             type:ACTION_TYPES.CREATE,
             payload: data
